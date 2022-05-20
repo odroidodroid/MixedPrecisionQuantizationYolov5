@@ -104,6 +104,7 @@ class QuantLinear(Module):
                 b_min = self.bias.data.min()
                 b_max = self.bias.data.max()
 
+        ### bias b_min/b_max where ???
         # perform the quantization
         if not self.full_precision_flag:
             if self.quant_mode == 'symmetric':
@@ -152,7 +153,6 @@ class QuantAct(Module):
 
     def __init__(self,
                  activation_bit=8,
-                 act_range_momentum=0.95,
                  full_precision_flag=False,
                  running_stat=True,
                  quant_mode="asymmetric",
@@ -161,7 +161,6 @@ class QuantAct(Module):
         super(QuantAct, self).__init__()
 
         self.activation_bit = activation_bit
-        self.act_range_momentum = act_range_momentum
         self.full_precision_flag = full_precision_flag
         self.running_stat = running_stat
         self.quant_mode = quant_mode
@@ -244,12 +243,8 @@ class QuantAct(Module):
                 self.x_max += x_max
 
             # use momentum to update the quantization range
-            elif self.act_range_momentum == -1:
-                self.x_min = min(self.x_min, x_min)
-                self.x_max = max(self.x_max, x_max)
-            else:
-                self.x_min = self.x_min * self.act_range_momentum + x_min * (1 - self.act_range_momentum)
-                self.x_max = self.x_max * self.act_range_momentum + x_max * (1 - self.act_range_momentum)
+            self.x_min = min(self.x_min, x_min)
+            self.x_max = max(self.x_max, x_max)
 
         # perform the quantization
         if not self.full_precision_flag:
