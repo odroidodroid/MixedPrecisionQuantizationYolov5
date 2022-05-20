@@ -473,7 +473,7 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
     return results
 
 
-def parse_opt(config=config, known=False):
+def parse_opt(config=None, known=False):
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default=ROOT / '../checkpoints/yolov5l.pt', help='initial weights path')
     parser.add_argument('--cfg', type=str, default='', help='model.yaml path')
@@ -517,7 +517,7 @@ def parse_opt(config=config, known=False):
 
 
     yml_txt = open(config).read()
-    loaded_yml = yml.load(yml_txt,Loader=yaml.FullLoder)
+    loaded_yml = yaml.load(yml_txt,Loader=yaml.FullLoader)
 
 
     opt = parser.parse_known_args()[0] if known else parser.parse_args()
