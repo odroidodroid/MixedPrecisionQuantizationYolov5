@@ -10,7 +10,7 @@ resume : False
 nosave : False
 noval : False
 noautoanchor : False
-noplots : False
+noplots : True
 #evolve : 
 bucket : ""
 #cache : 
